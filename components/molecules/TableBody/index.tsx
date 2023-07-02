@@ -77,7 +77,7 @@ const TableBody: React.FC<TableBodyProps> = (props) => {
             firstName: '',
             lastName: '',
             phone: '',
-            domian: '',
+            domain: '',
             companyName: '',
             email: '',
         });
