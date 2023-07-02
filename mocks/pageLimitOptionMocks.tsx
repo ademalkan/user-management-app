@@ -1,0 +1,1 @@
+export const pageLimitOptionMocks = [6, 12, 18, 24, 30, 36, 42, 48, 54, 60]
