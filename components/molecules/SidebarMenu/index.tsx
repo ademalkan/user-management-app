@@ -11,12 +11,12 @@ const SidebarMenu: FC<{ menuItems: MenuItem[] }> = ({ menuItems }) => {
             setActivePage(window.location.pathname.substr(1));
         };
 
-        handlePageChange(); // İlk render için mevcut sayfayı ayarla
+        handlePageChange(); 
 
-        window.addEventListener("popstate", handlePageChange); // Sayfa değişikliklerini dinle
+        window.addEventListener("popstate", handlePageChange);
 
         return () => {
-            window.removeEventListener("popstate", handlePageChange); // Temizleme işlevi
+            window.removeEventListener("popstate", handlePageChange); 
         };
     }, []);
 

@@ -13,10 +13,13 @@ const UserModalForm = ({
     show: boolean;
     actionTypeCreate: boolean;
     onClose: () => void;
-    onSubmit: () => void;
-    onInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
+    onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+    onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     user?: User
-}): JSX.Element => {
+}): JSX.Element | null => {
+    if (!show) {
+        return null;
+    }
     return (
         show && (
             <div className="fixed inset-0 flex items-center justify-center z-10 bg-white-grey ">
@@ -92,13 +95,13 @@ const UserModalForm = ({
                             </div>
                         </div>
                         <div className="flex justify-end">
-                        <button type="submit" className="mr-4  transition-colors text-smoke-white bg-dark-yellow hover:bg-open-yellow hover:text-smoke-white p-2 rounded-lg">
+                            <button type="submit" className="mr-4  transition-colors text-smoke-white bg-dark-yellow hover:bg-open-yellow hover:text-smoke-white p-2 rounded-lg">
                                 {actionTypeCreate ? "Add New User" : `Update User`}
                             </button>
                             <button type="button" className="border border-dark-yellow transition-colors hover:bg-dark-yellow hover:text-smoke-white p-2 rounded-lg" onClick={onClose}>
                                 Cancel
                             </button>
-                          
+
                         </div>
                     </form>
                 </div>

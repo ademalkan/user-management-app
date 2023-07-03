@@ -3,7 +3,7 @@ import SearchSvg from '@/components/atoms/SearchSvg';
 import UserModalForm from '../UserModalForm';
 
 export interface User {
-    id?: null|number;
+    id?: number | null;
     firstName: string;
     lastName: string;
     phone: string;
@@ -30,7 +30,7 @@ const TableSearchAndActions = ({
         firstName: '',
         lastName: '',
         phone: '',
-        website: '',
+        domain: '',
         companyName: '',
         email: '',
     });
@@ -53,7 +53,7 @@ const TableSearchAndActions = ({
             firstName: '',
             lastName: '',
             phone: '',
-            website: '',
+            domain: '',
             companyName: '',
             email: '',
         });

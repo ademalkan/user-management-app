@@ -7,6 +7,7 @@ export interface UserI {
     email: string;
     age: number;
     image: string;
+    companyName?: string;
     company: {
         address: {
             address: string;

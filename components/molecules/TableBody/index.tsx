@@ -12,7 +12,7 @@ import { updateUser } from "@/services/users";
 import Loading from '../Loading';
 import Error from '../Error';
 import NoData from '../NoData';
-import { AnimatePresence, motion } from 'framer-motion'; 
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface TableBodyProps {
     data: UserI[] | null;
@@ -49,17 +49,23 @@ const TableBody: React.FC<TableBodyProps> = (props) => {
         setIsConfirmationVisible(true);
     };
 
-    const confirmDelete = () => {
+    const confirmDelete = async (): Promise<void> => {
         if (selectedUserId !== null) {
-            handleUserDelete(selectedUserId);
+          try {
+            await handleUserDelete(selectedUserId);
             setIsConfirmationVisible(false);
             if (selectedUserId <= 100) {
-                toast.success('User deletion was successful.');
+              toast.success('User deletion was successful.');
             } else {
-                toast.error(`User deletion error. The newly added user's information was not found in the endpoint`);
+              toast.error(`User deletion error. The newly added user's information was not found in the endpoint`);
             }
+          } catch (error) {
+            console.error('Error deleting user:', error);
+            toast.error('An error occurred while deleting the user.');
+          }
         }
-    };
+      };
+      
 
     const cancelDelete = () => {
         setSelectedUserId(null);
@@ -83,16 +89,22 @@ const TableBody: React.FC<TableBodyProps> = (props) => {
         });
     };
 
-    const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+
+    const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
         event.preventDefault();
-        dispatch(updateUser(user));
-        handleModalClose();
-        if (user?.id <= 100) {
-            toast.success('User updated was successful.');
-        } else {
-            toast.error(`User update error. The update user's information was not found in the endpoint`);
+        try {
+          await dispatch(updateUser(user) as any);
+          handleModalClose();
+          if (user?.id !== null && user?.id !== undefined && user?.id <= 100) {
+            toast.success('User update was successful.');
+          } else {
+            toast.error(`User update error. The updated user's information was not found in the endpoint.`);
+          }
+        } catch (error) {
+          console.error('Error updating user:', error);
+          toast.error('An error occurred while updating the user.');
         }
-    };
+      };
 
     const handleFormInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = event.target;
@@ -132,55 +144,55 @@ const TableBody: React.FC<TableBodyProps> = (props) => {
 
     return (
         <>
-         <AnimatePresence>
-            {filteredData.map((user: UserI) => (
-                <motion.tr
-          initial={{ opacity: 0, y: 380 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
-          className="bg-smoke-white mb-3 pe-3 text-center flex justify-between items-center"
-          key={user.id}
-        >                    <td className="bg-white-yellow m-2 rounded-lg text-sm w-20">
-                        <Image
-                            width={65}
-                            height={55}
-                            alt={`${user.firstName} ${user.lastName}`}
-                            className="text-sm h-full w-full object-cover"
-                            src={user.image}
-                        />
-                    </td>
-                    <td className="w-28 text-sm px-6 py-3">{user.firstName}</td>
-                    <td className="w-28 text-sm px-6 py-3">{user.lastName}</td>
-                    <td className="w-28 text-sm px-6 py-3">{user.email}</td>
-                    <td className="w-28 text-sm px-6 py-3">{user.domain}</td>
-                    <td className="w-28 text-sm px-6 py-3">{user.company.name}</td>
-                    <td className="flex justify-between items-center w-28 text-sm px-6 py-3">
-                        {/* edit svg */}
-                        <button onClick={() => updateHandler(user)}>
-                            <EditSvg />
-                        </button>
+            <AnimatePresence>
+                {filteredData.map((user: UserI) => (
+                    <motion.tr
+                        initial={{ opacity: 0, y: 380 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, ease: 'easeOut' }}
+                        className="bg-smoke-white mb-3 pe-3 text-center flex justify-between items-center"
+                        key={user.id}
+                    >                    <td className="bg-white-yellow m-2 rounded-lg text-sm w-20">
+                            <Image
+                                width={65}
+                                height={55}
+                                alt={`${user.firstName} ${user.lastName}`}
+                                className="text-sm h-full w-full object-cover"
+                                src={user.image}
+                            />
+                        </td>
+                        <td className="w-28 text-sm px-6 py-3">{user.firstName}</td>
+                        <td className="w-28 text-sm px-6 py-3">{user.lastName}</td>
+                        <td className="w-28 text-sm px-6 py-3">{user.email}</td>
+                        <td className="w-28 text-sm px-6 py-3">{user.domain}</td>
+                        <td className="w-28 text-sm px-6 py-3">{user.company.name}</td>
+                        <td className="flex justify-between items-center w-28 text-sm px-6 py-3">
+                            {/* edit svg */}
+                            <button onClick={() => updateHandler(user as User)}>
+                                <EditSvg />
+                            </button>
 
-                        {/* delete svg */}
-                        <button onClick={() => deleteHandler(user.id)}>
-                            <DeleteSvg />
-                        </button>
-                    </td>
-                </motion.tr>
-            ))}
+                            {/* delete svg */}
+                            <button onClick={() => deleteHandler(user.id)}>
+                                <DeleteSvg />
+                            </button>
+                        </td>
+                    </motion.tr>
+                ))}
 
-            {/* Delete confirmation modal */}
-            {isConfirmationVisible && (
-                <ModalConfirmation title="Are you sure you want to delete this user?" cancelAction={cancelDelete} confirmAction={confirmDelete} />
-            )}
+                {/* Delete confirmation modal */}
+                {isConfirmationVisible && (
+                    <ModalConfirmation title="Are you sure you want to delete this user?" cancelAction={cancelDelete} confirmAction={confirmDelete} />
+                )}
 
-            <UserModalForm
-                show={showModal}
-                onClose={handleModalClose}
-                onSubmit={handleFormSubmit}
-                user={user}
-                actionTypeCreate={false}
-                onInputChange={handleFormInputChange}
-            />
+                <UserModalForm
+                    show={showModal}
+                    onClose={handleModalClose}
+                    onSubmit={handleFormSubmit}
+                    user={user}
+                    actionTypeCreate={false}
+                    onInputChange={handleFormInputChange}
+                />
             </AnimatePresence>
         </>
     );

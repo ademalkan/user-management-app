@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createNewUser, deleteUser, fetchUsersAsync, fetchUsersSearch } from "@/services/users";
+import { DeleteUsersI, createNewUser, deleteUser, fetchUsersAsync, fetchUsersSearch } from "@/services/users";
 import { UserDataI } from '@/utils/interfaces/UserInterfaces';
 import TableBody from '@/components/molecules/TableBody';
 import TableFooter from '@/components/molecules/TableFooter';
@@ -18,7 +18,7 @@ interface UsersTableProps {
 }
 
 const UsersTable: React.FC<UsersTableProps> = ({ searchParams }) => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<any>();
     const deletedUsers = useSelector((state: any) => state.users.deletedUsers);
     const addedUsers = useSelector((state: any) => state.users.addedUsers);
     const updatedUsers = useSelector((state: any) => state.users.updatedUsers);
@@ -42,9 +42,15 @@ const UsersTable: React.FC<UsersTableProps> = ({ searchParams }) => {
         setCurrentPage((prevPage) => prevPage + 1);
     };
 
-    const handleUserDelete = (id: number) => {
-        dispatch(deleteUser(id));
-    };
+
+    const handleUserDelete = async (id: number) => {
+        try {
+          dispatch(deleteUser(id));
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            toast.error('An error occurred while deleting the user.');
+        }
+      };
 
     const handleAddUser = (user: User) => {
         const newUser: User = {
