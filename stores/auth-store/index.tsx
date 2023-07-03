@@ -14,7 +14,6 @@ export const { reducer, actions } = createSlice({
     reducers: {
         login: (state) => {
             state.isAuth = true;
-            console.log("giriş yapıldı")
         },
         logout: (state) => {
             state.isAuth = false;

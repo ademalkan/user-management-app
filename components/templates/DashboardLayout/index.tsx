@@ -19,7 +19,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <Sidebar />
-      <div className={`${sidebarShow ? "md:w-4/5 max-[600px]:w-screen max-[600px]:relative max-[600px]:overflow-x-auto py-3 md:py-0" : "w-11/12" } md:ml-auto md:p-12 md:pl-0`}>
+      <div className={`${sidebarShow ? "md:w-4/5 max-[600px]:w-screen max-[600px]:relative max-[600px]:overflow-x-auto py-3 md:py-3" : "w-11/12" } md:ml-auto md:p-12 md:pl-0`}>
         <DashboardHeader />
         {children}
       </div>

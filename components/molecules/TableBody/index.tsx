@@ -1,3 +1,4 @@
+
 import DeleteSvg from '@/components/atoms/DeleteSvg';
 import EditSvg from '@/components/atoms/EditSvg';
 import { UserI } from '@/utils/interfaces/UserInterfaces';
@@ -51,21 +52,21 @@ const TableBody: React.FC<TableBodyProps> = (props) => {
 
     const confirmDelete = async (): Promise<void> => {
         if (selectedUserId !== null) {
-          try {
-            await handleUserDelete(selectedUserId);
-            setIsConfirmationVisible(false);
-            if (selectedUserId <= 100) {
-              toast.success('User deletion was successful.');
-            } else {
-              toast.error(`User deletion error. The newly added user's information was not found in the endpoint`);
+            try {
+                await handleUserDelete(selectedUserId);
+                setIsConfirmationVisible(false);
+                if (selectedUserId <= 100) {
+                    toast.success('User deletion was successful.');
+                } else {
+                    toast.error(`User deletion error. The newly added user's information was not found in the endpoint`);
+                }
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                toast.error('An error occurred while deleting the user.');
             }
-          } catch (error) {
-            console.error('Error deleting user:', error);
-            toast.error('An error occurred while deleting the user.');
-          }
         }
-      };
-      
+    };
+
 
     const cancelDelete = () => {
         setSelectedUserId(null);
@@ -93,18 +94,18 @@ const TableBody: React.FC<TableBodyProps> = (props) => {
     const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
         event.preventDefault();
         try {
-          await dispatch(updateUser(user) as any);
-          handleModalClose();
-          if (user?.id !== null && user?.id !== undefined && user?.id <= 100) {
-            toast.success('User update was successful.');
-          } else {
-            toast.error(`User update error. The updated user's information was not found in the endpoint.`);
-          }
+            await dispatch(updateUser(user) as any);
+            handleModalClose();
+            if (user?.id !== null && user?.id !== undefined && user?.id <= 100) {
+                toast.success('User update was successful.');
+            } else {
+                toast.error(`User update error. The updated user's information was not found in the endpoint.`);
+            }
         } catch (error) {
-          console.error('Error updating user:', error);
-          toast.error('An error occurred while updating the user.');
+            console.error('Error updating user:', error);
+            toast.error('An error occurred while updating the user.');
         }
-      };
+    };
 
     const handleFormInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = event.target;
@@ -152,7 +153,8 @@ const TableBody: React.FC<TableBodyProps> = (props) => {
                         transition={{ duration: 0.4, ease: 'easeOut' }}
                         className="bg-smoke-white mb-3 pe-3 text-center flex justify-between items-center"
                         key={user.id}
-                    >                    <td className="bg-white-yellow m-2 rounded-lg text-sm w-20">
+                    >
+                        <td className="bg-white-yellow m-2 rounded-lg text-sm w-20">
                             <Image
                                 width={65}
                                 height={55}
